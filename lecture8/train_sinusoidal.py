@@ -13,7 +13,7 @@ def main():
     # variance params in prior and posterior
     beta  = 25.0
     alpha = 2.0
-    bayesian_lr = BayesianLR(beta=beta, alpha=alpha)
+    bayesian_lr = BayesianLR(beta=beta, alpha=alpha, num_basis=2)
 
     # generate data
     X_tr = np.random.rand(N_list[-1], 1)
