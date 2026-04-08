@@ -9,6 +9,7 @@ from DataLoader import DataLoader
 from datetime import timedelta
 import time
 import numpy as np
+import argparse
 
 def mnist_bw():
     input_shape = (28*28,)
@@ -60,7 +61,7 @@ def mnist_bw():
     vae.decoder.downstream_tasks(plot_name='bw_imgs_prior')                        
     print('elapsed time: {}'.format(timedelta(seconds=time.time()-start)))
 
-def mnist_color():
+def mnist_color(modality = 'm0'):
     input_shape = (28,28,3)
     filters     = 32
     kernel_size = 3
@@ -79,7 +80,6 @@ def mnist_color():
     vae = VAE(enc, dec)
 
     # data
-    modality = 'm2'
     data_manager = DataLoader(dset='mnist_color')
     data_manager.load_data(modality=modality) # loads all files
     tr_data = data_manager.tf_loader(train=True, batch_size=256)
@@ -117,10 +117,15 @@ def mnist_color():
     print('elapsed time: {}'.format(timedelta(seconds=time.time()-start)))
 
 if __name__=='__main__':
-    dset = sys.argv[1]
-    if dset == 'color':
-        mnist_color()
-    elif dset == 'bw':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dset", default= 'color', help="dataset to use. choose between color and bw (black&white)")
+    parser.add_argument("--modality", default= 'm0', help="version of color images. choose between m0-m4")
+    args = parser.parse_args()
+    print(args)
+    
+    if args.dset == 'color':
+        mnist_color(args.modality)
+    elif args.dset == 'bw':
         mnist_bw()
     else:
         print('wrong dset')
